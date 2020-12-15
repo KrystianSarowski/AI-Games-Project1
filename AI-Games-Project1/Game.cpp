@@ -81,7 +81,7 @@ void Game::createTileGrid(float t_tileRadius, int t_maxRowLength)
 
 			auto it = std::find_if(m_grid.begin(), m_grid.end(), [=](const Tile* obj)
 			{
-				return obj->getPosition() == tile->getPosition();
+				return distance( obj->getPosition(), tile->getPosition()) < 1;
 			});
 
 			if (it == m_grid.end())
