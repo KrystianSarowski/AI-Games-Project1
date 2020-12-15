@@ -35,7 +35,8 @@ void Game::update(sf::Time dt)
 
 void Game::createTileGrid(float t_tileRadius, int t_maxRowLength)
 {
-	float tileOffset = t_tileRadius + 1.0f;
+	float offSetX = t_tileRadius + 1.0f;
+	float offSetY = offSetX * sinf(3.14f / 3);
 
 	sf::Vector2f startPos = sf::Vector2f(200.0f, 200.0f);
 
@@ -47,8 +48,8 @@ void Game::createTileGrid(float t_tileRadius, int t_maxRowLength)
 
 			sf::Vector2f pos;
 
-			pos.x = startPos.x + (x * (tileOffset * 2)) + tileOffset * (t_maxRowLength - count);
-			pos.y = startPos.y + (tileOffset * 2) * (t_maxRowLength - count);
+			pos.x = startPos.x + (x * (offSetX * 2)) + offSetX * (t_maxRowLength - count);
+			pos.y = startPos.y + (offSetY * 2) * (t_maxRowLength - count);
 
 			if (count < 5)
 			{
@@ -61,7 +62,7 @@ void Game::createTileGrid(float t_tileRadius, int t_maxRowLength)
 		}
 	}
 
-	startPos.y = startPos.y + (tileOffset * 2) * (t_maxRowLength - 5);
+	startPos.y = startPos.y + (offSetY * 2) * (t_maxRowLength - 5);
 
 	for (int count = t_maxRowLength; count > 0; count--)
 	{
@@ -71,8 +72,8 @@ void Game::createTileGrid(float t_tileRadius, int t_maxRowLength)
 
 			sf::Vector2f pos;
 
-			pos.x = startPos.x + (x * (tileOffset * 2)) + tileOffset * (t_maxRowLength - count);
-			pos.y = startPos.y - (tileOffset * 2) * (t_maxRowLength - count);
+			pos.x = startPos.x + (x * (offSetX * 2)) + offSetX * (t_maxRowLength - count);
+			pos.y = startPos.y - (offSetY * 2) * (t_maxRowLength - count);
 
 			tile->setPosition(pos);
 
@@ -96,7 +97,7 @@ void Game::createTileGrid(float t_tileRadius, int t_maxRowLength)
 
 void Game::connectTiles(float t_tileRadius)
 {
-	float maxTileOffset = (t_tileRadius + 2.5f) * 2;
+	float maxTileOffset = (t_tileRadius + 1.0f) * 2;
 
 	for (int i = 0; i < m_grid.size(); i++)
 	{
