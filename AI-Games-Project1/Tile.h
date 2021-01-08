@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <list>
+#include <array>
+#include <math.h>
 
 enum class OwnerColour
 {
@@ -20,11 +22,14 @@ public:
 	void setOwnerColour(OwnerColour t_ownerColour);
 	void setIsOccupied(bool t_isOccupied);
 	void addNeighbour(Tile* t_neighbour);
+	void setGoalCost(int t_index, int t_cost);
 
 	std::list<Tile*> getNeighbours() const;
 	OwnerColour getOwnerColour() const;
 	sf::Vector2f getPosition() const;
+	Tile* getNeighbourInDirection(sf::Vector2f t_direction) const;
 	bool getIsOccupied() const;
+	int getGoalCost(int t_index) const;
 
 private:
 
@@ -35,4 +40,6 @@ private:
 	std::list<Tile*> m_neighbours;
 
 	bool m_isOccupied;
+
+	std::array<int, 2> m_goalCosts;
 };

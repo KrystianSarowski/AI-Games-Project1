@@ -2,11 +2,28 @@
 
 Game::Game() : m_window{ sf::VideoMode{ 800, 600, 32 }, "Project 1" }
 {
+	m_player = new Player(PieceType::RED);
+
 	m_points[0].color = sf::Color(5, 5, 5);
 	m_points[1].color = sf::Color(255, 92, 203);
 
 	createTileGrid(10.0f, 13);
 	connectTiles(10.0f);
+	generateGoalCost(0);
+	generateGoalCost(1);
+
+
+	for (int i = 0; i < m_grid.size(); i++)
+	{
+		if (m_grid[i]->getOwnerColour() == OwnerColour::GREEN)
+		{
+			Piece* newPiece = new Piece(PieceType::GREEN);
+			newPiece->changeTile(m_grid[i]);
+			m_grid[i]->setIsOccupied(true);
+
+			m_player->addPiece(newPiece);
+		}
+	}
 }
 
 void Game::start()
@@ -64,6 +81,7 @@ void Game::createTileGrid(float t_tileRadius, int t_maxRowLength)
 		}
 	}
 
+	m_goalTiles[0] = m_grid[m_grid.size() - 1];
 	startPos.y = startPos.y + offSetY * (t_maxRowLength - 5);
 
 	for (int count = t_maxRowLength; count > 0; count--)
@@ -95,6 +113,8 @@ void Game::createTileGrid(float t_tileRadius, int t_maxRowLength)
 			}
 		}
 	}
+
+	m_goalTiles[1] = m_grid[m_grid.size() - 1];
 }
 
 void Game::connectTiles(float t_tileRadius)
@@ -116,6 +136,46 @@ void Game::connectTiles(float t_tileRadius)
 	}
 }
 
+void Game::generateGoalCost(int t_goalIndex)
+{
+	m_goalTiles[t_goalIndex]->setGoalCost(t_goalIndex, 0);
+
+	std::queue<Tile*> tileQueue;	
+
+	tileQueue.push(m_goalTiles[t_goalIndex]);
+
+	while (!tileQueue.empty())
+	{
+		std::list<Tile*> neighbourList = tileQueue.front()->getNeighbours();
+		int currenCost = tileQueue.front()->getGoalCost(t_goalIndex);
+		std::list<Tile*>::iterator it;
+
+		for (it = neighbourList.begin(); it != neighbourList.end(); ++it)
+		{
+			if ((*it)->getGoalCost(t_goalIndex) == -1)
+			{
+				(*it)->setGoalCost(t_goalIndex, currenCost + 1);
+				tileQueue.push(*it);
+			}
+		}
+
+		tileQueue.pop();
+	}
+}
+
+Tile* Game::findSelectedTile(sf::Vector2f t_pos)
+{
+	for (int i = 0; i < m_grid.size(); i++)
+	{
+		if (distance(m_grid[i]->getPosition(), t_pos) <= 10)
+		{
+			return m_grid[i];
+		}
+	}
+
+	return nullptr;
+}
+
 float Game::distance(sf::Vector2f t_vect1, sf::Vector2f t_vect2)
 {
 	return sqrt(powf(t_vect1.x - t_vect2.x, 2) + powf(t_vect1.y - t_vect2.y, 2));
@@ -125,8 +185,23 @@ void Game::processEvents()
 {
 	sf::Event event;
 
+	sf::Vector2f m_pos = m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window));
+
 	while (m_window.pollEvent(event))
 	{
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			if (event.key.code == sf::Mouse::Left)
+			{
+				Tile* selectedTile = findSelectedTile(m_pos);
+
+				if (selectedTile != nullptr)
+				{
+					m_player->processSelectedTile(selectedTile);
+				}
+			}
+		}
+
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Escape)
@@ -150,25 +225,10 @@ void Game::render()
 
 	node.setRadius(10);
 	node.setOrigin(sf::Vector2f(10.0f, 10.0f));
-	node.setFillColor(sf::Color::Yellow);
+	node.setFillColor(sf::Color::Blue);
 
 	for (int i = 0; i < m_grid.size(); i++)
 	{
-		switch (m_grid[i]->getOwnerColour())	
-		{
-		case OwnerColour::BLANK:
-			node.setFillColor(sf::Color::Yellow);
-			break;
-		case OwnerColour::RED:
-			node.setFillColor(sf::Color::Red);
-			break;
-		case OwnerColour::GREEN:
-			node.setFillColor(sf::Color::Green);
-			break;
-		default:
-			break;
-		}
-
 		node.setPosition(m_grid[i]->getPosition());
 		m_window.draw(node);
 	}
@@ -185,5 +245,6 @@ void Game::render()
 		}
 	}
 
+	m_player->render(m_window);
 	m_window.display();
 }
