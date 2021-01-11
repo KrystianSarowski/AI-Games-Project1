@@ -2,10 +2,17 @@
 
 float Piece::s_radius = 9.0f;
 
-Piece::Piece(PieceType t_type) :
-	m_type(t_type),
-	m_tile(nullptr)
+Piece::Piece() : m_tile(nullptr)
 {
+	m_body.setFillColor(sf::Color::White);
+	m_body.setRadius(s_radius);
+	m_body.setOrigin(sf::Vector2f(s_radius, s_radius));
+}
+
+void Piece::setType(PieceType t_type)
+{
+	m_type = t_type;
+
 	if (m_type == PieceType::GREEN)
 	{
 		m_body.setFillColor(sf::Color::Green);
@@ -15,12 +22,9 @@ Piece::Piece(PieceType t_type) :
 	{
 		m_body.setFillColor(sf::Color::Red);
 	}
-
-	m_body.setRadius(s_radius);
-	m_body.setOrigin(sf::Vector2f(s_radius, s_radius));
 }
 
-void Piece::changeTile(Tile* t_newTile)
+void Piece::setTile(Tile* t_newTile)
 {
 	m_tile = t_newTile;
 
@@ -35,6 +39,11 @@ void Piece::render(sf::RenderWindow& t_window)
 Tile* Piece::getTile()
 {
 	return m_tile;
+}
+
+PieceType Piece::getType()
+{
+	return m_type;
 }
 
 std::list<Tile*> Piece::getPossibleMoves()
@@ -58,13 +67,13 @@ std::list<Tile*> Piece::getPossibleMoves()
 
 	if (!allTilesEmpty)
 	{
-		jumpOver(tileList, m_tile);
+		getJumpOverMoves(tileList, m_tile);
 	}
 
 	return tileList;
 }
 
-void Piece::jumpOver(std::list<Tile*>& t_moveList, Tile* t_tile)
+void Piece::getJumpOverMoves(std::list<Tile*>& t_moveList, Tile* t_tile)
 {
 	std::list<Tile*> neighbourList = t_tile->getNeighbours();
 
@@ -72,19 +81,19 @@ void Piece::jumpOver(std::list<Tile*>& t_moveList, Tile* t_tile)
 	{
 		if ((*it)->getIsOccupied())
 		{
-			Tile* jumpedOverTile = (*it)->getNeighbourInDirection((*it)->getPosition() - t_tile->getPosition());
+			Tile* nextTile = (*it)->getNeighbourInDirection((*it)->getPosition() - t_tile->getPosition());
 
-			if (jumpedOverTile != nullptr)
+			if (nextTile != nullptr)
 			{
-				if (!jumpedOverTile->getIsOccupied())
+				if (!nextTile->getIsOccupied())
 				{
-					auto tileIterator = std::find(t_moveList.begin(), t_moveList.end(), jumpedOverTile);
+					auto tileIt = std::find(t_moveList.begin(), t_moveList.end(), nextTile);
 
-					if (tileIterator == t_moveList.end())
+					if (tileIt == t_moveList.end())
 					{
-						t_moveList.push_back(jumpedOverTile);
+						t_moveList.push_back(nextTile);
 
-						jumpOver(t_moveList, jumpedOverTile);
+						getJumpOverMoves(t_moveList, nextTile);
 					}
 				}
 			}
