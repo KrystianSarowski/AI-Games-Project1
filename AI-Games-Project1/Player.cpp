@@ -11,6 +11,14 @@ void Player::addPiece(Piece* t_piece)
 	m_pieces.push_back(t_piece);
 }
 
+void Player::makeAMove(Piece* t_pieceToMove, Tile* t_destTile)
+{
+	t_pieceToMove->getTile()->setIsOccupied(false);
+	t_pieceToMove->setTile(t_destTile);
+	t_destTile->setIsOccupied(true);
+	setMadeMove(true);
+}
+
 void Player::setMadeMove(bool t_madeMove)
 {
 	m_madeMove = t_madeMove;
@@ -32,11 +40,8 @@ void Player::processTile(Tile* t_selectedTile)
 			{
 				if ((*it) == t_selectedTile)
 				{
-					m_selectedPiece->getTile()->setIsOccupied(false);
-					m_selectedPiece->setTile(t_selectedTile);
-					t_selectedTile->setIsOccupied(true);
+					makeAMove(m_selectedPiece, t_selectedTile);
 					clearSelection();
-					setMadeMove(true);
 					return;
 				}
 			}

@@ -14,7 +14,9 @@ public:
 	Tile* selectTile(sf::Vector2f t_mousePos);
 	void render(sf::RenderWindow& t_window);
 
-	std::vector<Piece*> getPieces();
+	std::vector<Piece*> getPieces(PieceType t_type);
+
+	int calculateValue(PieceType t_type);
 
 private:
 
@@ -24,7 +26,8 @@ private:
 	void createPieces();
 
 	std::vector<Tile*> m_grid;
-	std::vector<Piece*> m_pieces;
+	std::vector<Piece*> m_piecesGreen;
+	std::vector<Piece*> m_piecesRed;
 
 	std::array<Tile*, 2> m_furthestGoalTiles;
 

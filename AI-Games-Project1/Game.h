@@ -1,6 +1,6 @@
 #pragma once
 #include "Board.h"
-#include "PlayerAI.h"
+#include "Algorithm.h"
 
 class Game
 {
@@ -18,7 +18,8 @@ private:
 
 	Board m_board;
 	Player* m_players[2];
-	PlayerAI* m_playerAI;
+	Algorithm* m_ai;
+	Algorithm* m_theCoolerAI;
 
 	int m_currentTurn = 0;
 

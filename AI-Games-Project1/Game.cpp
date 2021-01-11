@@ -6,7 +6,8 @@ Game::Game() : m_window{ sf::VideoMode{ 800, 600, 32 }, "Project 1" },
 	m_players[0] = new Player(PieceType::RED);
 	m_players[1] = new Player(PieceType::GREEN);
 
-	m_playerAI = new PlayerAI(m_players[0]);
+	m_ai = new Algorithm(m_players[0], &m_board);
+	m_theCoolerAI = new Algorithm(m_players[1], &m_board);
 
 	addPiecesToPlayers();
 }
@@ -35,7 +36,11 @@ void Game::update(sf::Time dt)
 {
 	if (m_currentTurn == 0)
 	{
-		m_playerAI->makeAMove();
+		m_ai->makeMove(dt);
+	}
+	else
+	{
+		m_theCoolerAI->makeMove(dt);
 	}
 
 	if (m_players[m_currentTurn]->getMadeMove())
@@ -100,10 +105,17 @@ void Game::render()
 
 void Game::addPiecesToPlayers()
 {
-	std::vector<Piece*> pieces = m_board.getPieces();
+	std::vector<Piece*> pieces = m_board.getPieces(PieceType::RED);
+
+	for (Piece* piece : pieces)
+	{
+		m_players[0]->addPiece(piece);
+	}
+
+	pieces = m_board.getPieces(PieceType::GREEN);
 
 	for(Piece* piece : pieces)	
 	{
-		m_players[static_cast<int>(piece->getType())]->addPiece(piece);
+		m_players[1]->addPiece(piece);
 	}
 }

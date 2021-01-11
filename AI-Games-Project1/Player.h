@@ -9,6 +9,7 @@ public:
 	Player(PieceType t_pieceType);
 
 	void addPiece(Piece* t_piece);
+	void makeAMove(Piece* t_pieceToMove, Tile* t_destTile);
 	void setMadeMove(bool t_madeMove);
 	void processTile(Tile* t_selectedTile);
 	void render(sf::RenderWindow& t_window);
@@ -19,9 +20,9 @@ public:
 	std::vector<Piece*> getPieces();
 	std::list<Tile*> getMoveList();
 
-private:
-
 	PieceType m_ownedType;
+
+private:
 
 	std::vector<Piece*> m_pieces;
 	std::list<Tile*> m_moveTiles;
