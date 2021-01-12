@@ -21,12 +21,14 @@ void Game::start()
 	while (m_window.isOpen())
 	{
 		processEvents();								//As many as possible
-		timeSinceLastUpdate += clock.restart();
-		while (timeSinceLastUpdate > timePerFrame)
+		timeSinceLastUpdate += clock.getElapsedTime();
+		
+		if (timeSinceLastUpdate > timePerFrame)
 		{
-			timeSinceLastUpdate -= timePerFrame;
 			processEvents();							//At least 60 fps
 			update(timePerFrame);						//60 fps
+			timeSinceLastUpdate -= timePerFrame;
+			clock.restart();
 		}
 		render();										//As many as possible
 	}

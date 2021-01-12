@@ -5,13 +5,6 @@
 #include <array>
 #include <math.h>
 
-enum class OwnerColour
-{
-	RED,
-	GREEN,
-	BLANK
-};
-
 class Tile
 {
 public:
@@ -19,13 +12,11 @@ public:
 	Tile();
 
 	void setPosition(sf::Vector2f t_pos);
-	void setOwnerColour(OwnerColour t_ownerColour);
 	void setIsOccupied(bool t_isOccupied);
 	void addNeighbour(Tile* t_neighbour);
 	void setGoalCost(int t_index, int t_cost);
 
 	std::list<Tile*> getNeighbours() const;
-	OwnerColour getOwnerColour() const;
 	sf::Vector2f getPosition() const;
 	Tile* getNeighbourInDirection(sf::Vector2f t_direction) const;
 	bool getIsOccupied() const;
@@ -34,8 +25,6 @@ public:
 private:
 
 	sf::Vector2f m_position;
-
-	OwnerColour m_ownerColour; 
 
 	std::list<Tile*> m_neighbours;
 

@@ -7,22 +7,30 @@ Algorithm::Algorithm(Player* t_player, Board* t_board) :
 
 }
 
-int Algorithm::miniMax(Evaluation& t_evaluation, PieceType t_type, int t_depth, bool t_maximizing)
+int Algorithm::miniMax(Evaluation& t_evaluation, int t_typeIndex, int t_depth, bool t_maximizing)
 {
     if (t_depth == 0)
     {
-        return m_board->calculateValue(static_cast<PieceType>((static_cast<int>(t_type) + 1) % 2));
+        return m_board->calculateValue(m_player->m_ownedType);
     }
 
-    std::vector<std::list<Tile*>> allPossibleMoves = getPossibleMoves(t_type);
-    std::vector<Piece*> pieces = m_board->getPieces(t_type);
+    if (m_board->checkForWin(m_player->m_ownedType))
+    {
+        return 1000;
+    }
+
+    else if (m_board->checkForWin(static_cast<PieceType>((static_cast<int>(m_player->m_ownedType) + 1) % 2)))
+    {
+        return -1000;
+    }
+
+    std::vector<std::list<Tile*>> allPossibleMoves = getPossibleMoves(static_cast<PieceType>(t_typeIndex));
+    std::vector<Piece*> pieces = m_board->getPieces(static_cast<PieceType>(t_typeIndex));
 
     if (t_maximizing)
     {
         for (int i = 0; i < pieces.size(); i++)
         {
-            int typeIndex = static_cast<int>(pieces[i]->getType());
-
             for (auto it = allPossibleMoves[i].begin(); it != allPossibleMoves[i].end(); ++it)
             {
                 Evaluation tempEval;
@@ -37,11 +45,9 @@ int Algorithm::miniMax(Evaluation& t_evaluation, PieceType t_type, int t_depth, 
 
                 simulateMove(tempEval.m_piece, tempEval.m_targetTile);
 
-                int cost = miniMax(tempEval, static_cast<PieceType>((static_cast<int>(t_type) + 1) % 2), t_depth - 1, false);
+                int cost = miniMax(tempEval, (t_typeIndex + 1) % 2, t_depth - 1, false);
 
                 simulateMove(piece, prevTile);
-
-                
 
                 if(t_evaluation.m_alphaPruning < cost)
                 {
@@ -64,7 +70,6 @@ int Algorithm::miniMax(Evaluation& t_evaluation, PieceType t_type, int t_depth, 
     {
         for (int i = 0; i < pieces.size(); i++)
         {
-            int typeIndex = static_cast<int>(pieces[i]->getType());
 
             for (auto it = allPossibleMoves[i].begin(); it != allPossibleMoves[i].end(); ++it)
             {
@@ -80,7 +85,7 @@ int Algorithm::miniMax(Evaluation& t_evaluation, PieceType t_type, int t_depth, 
 
                 simulateMove(tempEval.m_piece, tempEval.m_targetTile);
 
-                int cost = miniMax(tempEval, static_cast<PieceType>(static_cast<int>(t_type) + 1 % 2), t_depth - 1, true);
+                int cost = miniMax(tempEval, (t_typeIndex + 1) % 2, t_depth - 1, true);
 
                 simulateMove(piece, prevTile);
 
@@ -107,7 +112,7 @@ void Algorithm::calculateMove()
     m_moveEvaluation.m_alphaPruning = INT_MIN;
     m_moveEvaluation.m_betaPruning = INT_MAX;
 
-    miniMax(m_moveEvaluation, m_player->m_ownedType, 3, true);
+    miniMax(m_moveEvaluation, static_cast<int>(m_player->m_ownedType), 3, true);
 
     m_player->processTile(m_moveEvaluation.m_piece->getTile());
 }
