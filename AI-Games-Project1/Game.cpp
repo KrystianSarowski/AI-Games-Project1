@@ -1,15 +1,13 @@
 #include "Game.h"
 
-Game::Game() : m_window{ sf::VideoMode{ 800, 600, 32 }, "Project 1" },
-	m_board(sf::Vector2u(800, 600))
+Game::Game() : m_window{ sf::VideoMode{ 800, 600, 32 }, "Chinese Checkers" }
 {
-	m_players[0] = new Player(PieceType::RED);
-	m_players[1] = new Player(PieceType::GREEN);
-
-	m_ai = new Algorithm(m_players[0], &m_board);
-	m_theCoolerAI = new Algorithm(m_players[1], &m_board);
-
-	addPiecesToPlayers();
+	m_previousState = GameScreen::MainScreen;
+	m_currentState = GameScreen::MainScreen;
+	m_screens.push_back(new MainScreen(m_currentState));
+	m_screens.push_back(new OpponentScreen(m_currentState));
+	m_screens.push_back(new DifficultyScreen(m_currentState));
+	m_screens.push_back(new Gameplay(m_currentState));
 }
 
 void Game::start()
@@ -34,19 +32,18 @@ void Game::start()
 
 void Game::update(sf::Time dt)
 {
-	if (m_currentTurn == 0)
+	
+	if (m_currentState != GameScreen::Quit)
 	{
-		m_ai->makeMove(dt);
-	}
-	else
-	{
-		m_theCoolerAI->makeMove(dt);
-	}
+		m_screens[static_cast<int>(m_currentState)]->update(dt);
 
-	if (m_players[m_currentTurn]->getMadeMove())
-	{
-		m_currentTurn = (m_currentTurn + 1) % 2;
-		m_players[m_currentTurn]->setMadeMove(false);
+		if (m_currentState != m_previousState && m_currentState != GameScreen::Quit)
+		{
+			m_screens[static_cast<int>(m_previousState)]->end();
+			m_screens[static_cast<int>(m_currentState)]->start(m_previousState);
+
+			m_previousState = m_currentState;
+		}
 	}
 }
 
@@ -58,33 +55,15 @@ void Game::processEvents()
 
 	while (m_window.pollEvent(event))
 	{
-		if (m_currentTurn != 0)
-		{
-			if (event.type == sf::Event::MouseButtonPressed)
-			{
-				if (event.key.code == sf::Mouse::Left)
-				{
-					Tile* selectedTile = m_board.selectTile(m_pos);
-
-					if (selectedTile != nullptr)
-					{
-						m_players[m_currentTurn]->processTile(selectedTile);
-					}
-				}
-			}
-		}
-
-		if (event.type == sf::Event::KeyPressed)
-		{
-			if (event.key.code == sf::Keyboard::Escape)
-			{
-				m_window.close();
-			}
-		}
-
-		if (sf::Event::Closed == event.type)
+		if (event.type == sf::Event::Closed || m_currentState == GameScreen::Quit)
 		{
 			m_window.close();
+		}
+		else
+		{
+			sf::Vector2f m_pos = m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window));
+
+			m_screens[static_cast<int>(m_currentState)]->processEvents(event, m_pos);
 		}
 	}
 }
@@ -92,30 +71,11 @@ void Game::processEvents()
 void Game::render()
 {
 	m_window.clear();
-
-	m_board.render(m_window);
-
-	for (int i = 0; i < 2; i++)
+	if (m_currentState != GameScreen::Quit)
 	{
-		m_players[i]->render(m_window);
+		m_screens[static_cast<int>(m_currentState)]->render(m_window);
 	}
-
 	m_window.display();
+
 }
 
-void Game::addPiecesToPlayers()
-{
-	std::vector<Piece*> pieces = m_board.getPieces(PieceType::RED);
-
-	for (Piece* piece : pieces)
-	{
-		m_players[0]->addPiece(piece);
-	}
-
-	pieces = m_board.getPieces(PieceType::GREEN);
-
-	for(Piece* piece : pieces)	
-	{
-		m_players[1]->addPiece(piece);
-	}
-}

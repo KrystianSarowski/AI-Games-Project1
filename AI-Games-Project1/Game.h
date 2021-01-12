@@ -1,6 +1,9 @@
 #pragma once
-#include "Board.h"
-#include "Algorithm.h"
+#include <SFML/Graphics.hpp>
+#include "MainScreen.h"
+#include "OpponentScreen.h"
+#include "DifficultyScreen.h"
+#include "Gameplay.h"
 
 class Game
 {
@@ -14,15 +17,10 @@ private:
 	void update(sf::Time dt);
 	void processEvents();
 	void render();
-	void addPiecesToPlayers();
-
-	Board m_board;
-	Player* m_players[2];
-	Algorithm* m_ai;
-	Algorithm* m_theCoolerAI;
-
-	int m_currentTurn = 0;
 
 	sf::RenderWindow m_window;
+	std::vector<Screen*> m_screens;
+	GameScreen m_currentState;
+	GameScreen m_previousState;
 };
 
