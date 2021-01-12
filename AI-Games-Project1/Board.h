@@ -31,7 +31,7 @@ private:
 
 	std::array<Tile*, 2> m_furthestGoalTiles;
 
-	const float m_TILE_RADIUS{ 10.0f };;
+	const float m_TILE_RADIUS{ 15.0f };;
 	const int m_MAX_ROW_LENGTH{ 13 };
 };
 

@@ -25,10 +25,11 @@ void Board::render(sf::RenderWindow& t_window)
 {
 	sf::CircleShape tile;
 
-	tile.setRadius(10);
-	tile.setOrigin(sf::Vector2f(10.0f, 10.0f));
-	tile.setFillColor(sf::Color::Blue);
-
+	tile.setRadius(m_TILE_RADIUS-4.0f);
+	tile.setOrigin(sf::Vector2f(m_TILE_RADIUS - 4.0f, m_TILE_RADIUS - 4.0f));
+	tile.setFillColor(sf::Color(128, 128, 128));
+	tile.setOutlineThickness(3.0f);
+	tile.setOutlineColor(sf::Color::Black);
 	for (int i = 0; i < m_grid.size(); i++)
 	{
 		tile.setPosition(m_grid[i]->getPosition());

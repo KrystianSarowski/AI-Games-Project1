@@ -59,7 +59,8 @@ void Gameplay::update(sf::Time t_dt)
 void Gameplay::render(sf::RenderWindow& t_window)
 {
 	t_window.clear(sf::Color::Black);
-	//t_window.draw(m_hud);
+	t_window.draw(m_hud);
+	t_window.draw(m_boardSprite);
 	m_board.render(t_window);
 
 	for (int i = 0; i < 2; i++)
@@ -104,6 +105,16 @@ void Gameplay::initialise()
 	
 	m_hud.setTexture(m_texture);
 	m_hud.setColor(m_hud.getColor() - sf::Color{ 0,0,0,255 });
+
+	if (!m_boardTexture.loadFromFile("Images/gameplayBoard.png"))
+	{
+		std::cout << "board did not load" << std::endl;
+	}
+
+	m_boardSprite.setTexture(m_boardTexture);
+	m_boardSprite.setPosition(400, 300);
+	m_boardSprite.setOrigin(m_boardSprite.getGlobalBounds().width / 2, m_boardSprite.getGlobalBounds().height / 2);
+	m_boardSprite.setScale(0.8, 0.8);
 }
 
 void Gameplay::addPiecesToPlayers()

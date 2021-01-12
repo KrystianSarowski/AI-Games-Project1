@@ -22,5 +22,7 @@ private:
 	Player* m_players[2];
 	Algorithm* m_ai;
 	Algorithm* m_theCoolerAI;
+	sf::Sprite m_boardSprite;
+	sf::Texture m_boardTexture;
 };
 

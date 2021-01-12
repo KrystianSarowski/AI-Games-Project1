@@ -1,6 +1,6 @@
 #include "Piece.h"
 
-float Piece::s_radius = 9.0f;
+float Piece::s_radius = 11.0f;
 
 Piece::Piece() : m_tile(nullptr)
 {

@@ -36,7 +36,7 @@ void DifficultyScreen::update(sf::Time t_dt)
 void DifficultyScreen::render(sf::RenderWindow& t_window)
 {
 	t_window.clear(sf::Color::Black);
-	//t_window.draw(m_hud);
+	t_window.draw(m_hud);
 	t_window.draw(m_eButton);
 	t_window.draw(m_mButton);
 	t_window.draw(m_hButton);

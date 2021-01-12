@@ -36,7 +36,7 @@ void OpponentScreen::update(sf::Time t_dt)
 void OpponentScreen::render(sf::RenderWindow& t_window)
 {
 	t_window.clear(sf::Color::Black);
-	//t_window.draw(m_hud);
+	t_window.draw(m_hud);
 	t_window.draw(m_pvcButton);
 	t_window.draw(m_cvcButton);
 	t_window.draw(m_pvpButton);

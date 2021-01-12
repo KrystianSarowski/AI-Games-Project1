@@ -62,9 +62,9 @@ void Player::processTile(Tile* t_selectedTile)
 void Player::render(sf::RenderWindow& t_window)
 {
 	sf::CircleShape marker;
-	marker.setRadius(8.0f);
+	marker.setRadius(11.0f);
 	marker.setFillColor(sf::Color::Yellow);
-	marker.setOrigin(sf::Vector2f(8.0f, 8.0f));
+	marker.setOrigin(sf::Vector2f(11.0f, 11.0f));
 
 	for (auto it = m_moveTiles.begin(); it != m_moveTiles.end(); ++it)
 	{

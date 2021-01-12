@@ -37,7 +37,7 @@ void MainScreen::update(sf::Time t_dt)
 void MainScreen::render(sf::RenderWindow& t_window)
 {
 	t_window.clear(sf::Color::Black);
-	//t_window.draw(m_hud);
+	t_window.draw(m_hud);
 	t_window.draw(m_playButton);
 	t_window.draw(m_quitButton);
 	t_window.draw(m_playText);
@@ -96,14 +96,14 @@ void MainScreen::setupButtons()
 	m_playButton.setOutlineThickness(5.0f);
 	m_playButton.setOutlineColor(sf::Color::Black);
 	m_playButton.setOrigin(m_playButton.getSize().x / 2, m_playButton.getSize().y / 2);
-	m_playButton.setPosition(400.0f, 250.0f);
+	m_playButton.setPosition(400.0f, 350.0f);
 
 	m_quitButton.setSize(sf::Vector2f(200.0f, 30.0f));
 	m_quitButton.setFillColor(sf::Color::Blue);
 	m_quitButton.setOutlineThickness(5.0f);
 	m_quitButton.setOutlineColor(sf::Color::Black);
 	m_quitButton.setOrigin(m_quitButton.getSize().x / 2, m_quitButton.getSize().y / 2);
-	m_quitButton.setPosition(400.0f, 350.0f);
+	m_quitButton.setPosition(400.0f, 450.0f);
 }
 
 void MainScreen::setupText()
@@ -115,7 +115,7 @@ void MainScreen::setupText()
 	sf::FloatRect textRect = m_playText.getLocalBounds();
 
 	m_playText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	m_playText.setPosition(400.0f, 250.0f);
+	m_playText.setPosition(400.0f, 350.0f);
 
 	m_quitText.setString("Quit");
 	m_quitText.setFillColor(sf::Color::White);
@@ -124,6 +124,6 @@ void MainScreen::setupText()
 	textRect = m_quitText.getLocalBounds();
 
 	m_quitText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	m_quitText.setPosition(400.0f, 350.0f);
+	m_quitText.setPosition(400.0f, 450.0f);
 }
 
