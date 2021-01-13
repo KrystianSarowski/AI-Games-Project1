@@ -17,6 +17,7 @@ public:
 	std::vector<Piece*> getPieces(PieceType t_type);
 
 	int calculateValue(PieceType t_type);
+	bool checkForWin(PieceType t_type);
 
 private:
 
@@ -26,6 +27,9 @@ private:
 	void createPieces();
 
 	std::vector<Tile*> m_grid;
+	std::vector<Tile*> m_greenGoalTiles;
+	std::vector<Tile*> m_redGoalTiles;
+
 	std::vector<Piece*> m_piecesGreen;
 	std::vector<Piece*> m_piecesRed;
 

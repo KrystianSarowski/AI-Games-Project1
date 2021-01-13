@@ -111,13 +111,12 @@ void Board::createGrid(sf::Vector2u t_windowSize)
 
 			pos.x = startPos.x + (x * offSetX) + (offSetX / 2) * (m_MAX_ROW_LENGTH - count);
 			pos.y = startPos.y + offSetY * (m_MAX_ROW_LENGTH - count);
+			tile->setPosition(pos);
 
 			if (count < 5)
 			{
-				tile->setOwnerColour(OwnerColour::GREEN);
+				m_greenGoalTiles.push_back(tile);
 			}
-
-			tile->setPosition(pos);
 
 			m_grid.push_back(tile);
 		}
@@ -137,7 +136,6 @@ void Board::createGrid(sf::Vector2u t_windowSize)
 
 			pos.x = startPos.x + (x * offSetX) + (offSetX / 2) * (m_MAX_ROW_LENGTH - count);
 			pos.y = startPos.y - offSetY * (m_MAX_ROW_LENGTH - count);
-
 			tile->setPosition(pos);
 
 			auto it = std::find_if(m_grid.begin(), m_grid.end(), [=](const Tile* obj)
@@ -149,7 +147,7 @@ void Board::createGrid(sf::Vector2u t_windowSize)
 			{
 				if (count < 5)
 				{
-					tile->setOwnerColour(OwnerColour::RED);
+					m_redGoalTiles.push_back(tile);
 				}
 
 				m_grid.push_back(tile);
@@ -211,26 +209,70 @@ void Board::generateCosts()
 
 void Board::createPieces()
 {
-	for (int i = 0; i < m_grid.size(); i++)
+	for (Tile* goalTile : m_greenGoalTiles)
 	{
-		if (m_grid[i]->getOwnerColour() == OwnerColour::GREEN)
-		{
-			Piece* newPiece = new Piece();
-			newPiece->setType(PieceType::GREEN);
-			newPiece->setTile(m_grid[i]);
-			m_grid[i]->setIsOccupied(true);
+		Piece* newPiece = new Piece();
+		newPiece->setType(PieceType::GREEN);
+		newPiece->setTile(goalTile);
+		goalTile->setIsOccupied(true);
 
-			m_piecesGreen.push_back(newPiece);
+		m_piecesGreen.push_back(newPiece);
+	}
+
+	for (Tile* goalTile : m_redGoalTiles)
+	{
+		Piece* newPiece = new Piece();
+		newPiece->setType(PieceType::RED);
+		newPiece->setTile(goalTile);
+		goalTile->setIsOccupied(true);
+
+		m_piecesRed.push_back(newPiece);
+	}
+}
+
+bool Board::checkForWin(PieceType t_type)
+{
+	int count = 0;
+
+	if (t_type == PieceType::GREEN)
+	{
+		for (Piece* piece : m_piecesGreen)
+		{
+			for (Tile* goalTile : m_redGoalTiles)
+			{
+				if (piece->getTile() == goalTile)
+				{
+					count += 1;
+					break;
+				}
+			}
 		}
 
-		else if (m_grid[i]->getOwnerColour() == OwnerColour::RED)
+		if (count == m_piecesGreen.size())
 		{
-			Piece* newPiece = new Piece();
-			newPiece->setType(PieceType::RED);
-			newPiece->setTile(m_grid[i]);
-			m_grid[i]->setIsOccupied(true);
-
-			m_piecesRed.push_back(newPiece);
+			return true;
 		}
 	}
+
+	else
+	{
+		for (Piece* piece : m_piecesRed)
+		{
+			for (Tile* goalTile : m_greenGoalTiles)
+			{
+				if (piece->getTile() == goalTile)
+				{
+					count += 1;
+					break;
+				}
+			}
+		}
+
+		if (count == m_piecesRed.size())
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

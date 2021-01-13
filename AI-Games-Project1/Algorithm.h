@@ -21,7 +21,7 @@ public:
 
 	Algorithm(Player* t_player, Board* t_board);
 
-	int miniMax(Evaluation& t_evaluation, PieceType t_type, int t_depth, bool t_maximizing);
+	int miniMax(Evaluation& t_evaluation, int t_typeIndex, int t_depth, bool t_maximizing);
 	
 	void calculateMove();
 	void makeMove(sf::Time t_dt);
@@ -30,7 +30,7 @@ private:
 
 	sf::Time m_moveDelay;
 
-	float m_delayTime = 1.5f;
+	float m_delayTime = 0.5f;
 
 	bool m_moveCalculated;
 
