@@ -2,6 +2,20 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "enum.h"
+static enum class GameplayStates
+{
+	PlayerVsAi,
+	AiVsAi,
+	PlayerVsPlayer
+};
+
+static enum class Difficulty
+{
+	Easy,
+	Medium,
+	Hard
+};
+
 class Screen
 {
 public:
@@ -14,7 +28,8 @@ public:
 protected:
 	GameScreen & m_gamescreen;
 	sf::Texture m_texture;
-
+	GameplayStates m_gameplayState;
+	Difficulty m_difficulty;
 	sf::Sprite m_hud;
 
 	sf::Font m_font;

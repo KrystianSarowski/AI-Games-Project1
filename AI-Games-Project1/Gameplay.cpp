@@ -9,6 +9,7 @@ Gameplay::Gameplay(GameScreen& t_gameScreen) :
 	m_players[1] = new Player(PieceType::GREEN);
 
 	m_ai = new Algorithm(m_players[0], &m_board);
+
 	m_theCoolerAI = new Algorithm(m_players[1], &m_board);
 
 	addPiecesToPlayers();

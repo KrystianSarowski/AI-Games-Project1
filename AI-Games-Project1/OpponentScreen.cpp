@@ -55,7 +55,7 @@ void OpponentScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				//change gameplay state to pvc
+				m_gameplayState = GameplayStates::PlayerVsAi;
 			}
 		}
 	}
@@ -68,7 +68,7 @@ void OpponentScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				//change gameplay state to cvc
+				m_gameplayState = GameplayStates::AiVsAi;
 			}
 		}
 	}
@@ -81,7 +81,7 @@ void OpponentScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				//change gameplay state to pvp
+				m_gameplayState = GameplayStates::PlayerVsPlayer;
 			}
 		}
 	}

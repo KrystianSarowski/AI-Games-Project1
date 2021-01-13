@@ -17,9 +17,3 @@ enum class AnimationMode
 	Always
 };
 
-enum class GameplayStates
-{
-	PlayerVsAi,
-	AiVsAi,
-	PlayerVsPlayer
-};

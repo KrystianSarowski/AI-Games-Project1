@@ -55,7 +55,7 @@ void DifficultyScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				//change gameplay diff to easy
+				m_difficulty = Difficulty::Easy;
 			}
 		}
 	}
@@ -68,7 +68,7 @@ void DifficultyScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				//change gameplay diff to medium
+				m_difficulty = Difficulty::Medium;
 			}
 		}
 	}
@@ -81,7 +81,7 @@ void DifficultyScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				//change gameplay diff to hard
+				m_difficulty = Difficulty::Hard;
 			}
 		}
 	}

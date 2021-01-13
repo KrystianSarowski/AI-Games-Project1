@@ -4,6 +4,7 @@
 #include "enum.h"
 #include "Algorithm.h"
 #include "Board.h"
+
 class Gameplay : public Screen
 {
 public:
