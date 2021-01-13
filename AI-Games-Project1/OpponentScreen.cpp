@@ -29,6 +29,7 @@ void OpponentScreen::update(sf::Time t_dt)
 		else if (m_hud.getColor().a <= 0)
 		{
 			m_gamescreen = GameScreen::Difficulty;
+			m_animationState = AnimationMode::Appear;
 		}
 	}
 	
