@@ -26,12 +26,13 @@ void MainScreen::update(sf::Time t_dt)
 		{
 			m_hud.setColor(m_hud.getColor() - sf::Color{ 0,0,0,5 });
 		}
+		else if (m_hud.getColor().a <= 0)
+		{
+			m_gamescreen = GameScreen::OpponentSelect;
+			m_animationState = AnimationMode::Appear;
+		}
 	}
-	if (m_hud.getColor().a <= 0)
-	{
-		m_gamescreen = GameScreen::OpponentSelect;
-		m_animationState = AnimationMode::Appear;
-	}
+	
 }
 
 void MainScreen::render(sf::RenderWindow& t_window)

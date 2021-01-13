@@ -47,6 +47,7 @@ void Game::update(sf::Time dt)
 			m_previousState = m_currentState;
 		}
 	}
+
 }
 
 void Game::processEvents()

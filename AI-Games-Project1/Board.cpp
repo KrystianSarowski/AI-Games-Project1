@@ -276,3 +276,9 @@ bool Board::checkForWin(PieceType t_type)
 
 	return false;
 }
+
+void Board::restart()
+{
+	//reset all pieces
+
+}

@@ -6,7 +6,7 @@ class Player
 {
 public:
 
-	Player(PieceType t_pieceType);
+	Player(PieceType t_pieceType, std::string t_name);
 
 	void addPiece(Piece* t_piece);
 	void makeAMove(Piece* t_pieceToMove, Tile* t_destTile);
@@ -21,9 +21,10 @@ public:
 	std::list<Tile*> getMoveList();
 
 	PieceType m_ownedType;
+	std::string getPlayerName() { return m_name; }
 
 private:
-
+	std::string m_name;
 	std::vector<Piece*> m_pieces;
 	std::list<Tile*> m_moveTiles;
 

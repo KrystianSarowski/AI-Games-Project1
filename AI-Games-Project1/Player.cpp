@@ -1,8 +1,9 @@
 #include "Player.h"
 
-Player::Player(PieceType t_pieceType):
+Player::Player(PieceType t_pieceType, std::string t_name):
 	m_ownedType(t_pieceType),
-	m_selectedPiece(nullptr)
+	m_selectedPiece(nullptr),
+	m_name(t_name)
 {
 }
 

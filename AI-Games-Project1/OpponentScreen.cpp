@@ -26,11 +26,12 @@ void OpponentScreen::update(sf::Time t_dt)
 		{
 			m_hud.setColor(m_hud.getColor() - sf::Color{ 0,0,0,5 });
 		}
+		else if (m_hud.getColor().a <= 0)
+		{
+			m_gamescreen = GameScreen::Difficulty;
+		}
 	}
-	if (m_hud.getColor().a <= 0)
-	{
-		m_gamescreen = GameScreen::Difficulty;
-	}
+	
 }
 
 void OpponentScreen::render(sf::RenderWindow& t_window)
@@ -89,10 +90,12 @@ void OpponentScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 
 void OpponentScreen::start(GameScreen t_previousState)
 {
+
 }
 
 void OpponentScreen::end()
 {
+
 }
 
 void OpponentScreen::initialise()

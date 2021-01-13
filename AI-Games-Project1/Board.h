@@ -18,7 +18,7 @@ public:
 
 	int calculateValue(PieceType t_type);
 	bool checkForWin(PieceType t_type);
-
+	void restart();
 private:
 
 	void createGrid(sf::Vector2u t_windowSize);

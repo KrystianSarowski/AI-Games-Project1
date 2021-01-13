@@ -25,5 +25,11 @@ private:
 	Algorithm* m_theCoolerAI;
 	sf::Sprite m_boardSprite;
 	sf::Texture m_boardTexture;
+	bool isGameWon = false;
+
+	sf::Text m_gameoverText;
+	sf::RectangleShape m_gameoverHud;
+	sf::RectangleShape m_returnButton;
+	sf::Text m_returnText;
 };
 

@@ -26,11 +26,12 @@ void DifficultyScreen::update(sf::Time t_dt)
 		{
 			m_hud.setColor(m_hud.getColor() - sf::Color{ 0,0,0,5 });
 		}
+		else if (m_hud.getColor().a <= 0)
+		{
+			m_gamescreen = GameScreen::Gameplay;
+		}
 	}
-	if (m_hud.getColor().a <= 0)
-	{
-		m_gamescreen = GameScreen::Gameplay;
-	}
+	
 }
 
 void DifficultyScreen::render(sf::RenderWindow& t_window)
