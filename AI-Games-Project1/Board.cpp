@@ -67,12 +67,12 @@ int Board::calculateValue(PieceType t_type)
 	{
 		for (int i = 0; i < m_piecesGreen.size(); i++)
 		{
-			totalValue1 += m_piecesGreen[i]->getTile()->getGoalCost(static_cast<int>(PieceType::GREEN));
+			totalValue1 += m_piecesGreen[i]->getTile()->getTotalGoalCost(static_cast<int>(PieceType::GREEN));
 		}
 
 		for (int j = 0; j < m_piecesRed.size(); j++)
 		{
-			totalValue2 += m_piecesRed[j]->getTile()->getGoalCost(static_cast<int>(PieceType::RED));
+			totalValue2 += m_piecesRed[j]->getTile()->getTotalGoalCost(static_cast<int>(PieceType::RED));
 		}
 	}
 
@@ -80,12 +80,12 @@ int Board::calculateValue(PieceType t_type)
 	{
 		for (int i = 0; i < m_piecesGreen.size(); i++)
 		{
-			totalValue2 += m_piecesGreen[i]->getTile()->getGoalCost(static_cast<int>(PieceType::GREEN));
+			totalValue2 += m_piecesGreen[i]->getTile()->getTotalGoalCost(static_cast<int>(PieceType::GREEN));
 		}
 
 		for (int j = 0; j < m_piecesRed.size(); j++)
 		{
-			totalValue1 += m_piecesRed[j]->getTile()->getGoalCost(static_cast<int>(PieceType::RED));
+			totalValue1 += m_piecesRed[j]->getTile()->getTotalGoalCost(static_cast<int>(PieceType::RED));
 		}
 	}
 
@@ -181,7 +181,9 @@ void Board::generateCosts()
 {
 	for (int i = 0; i < m_furthestGoalTiles.size(); i++)
 	{
-		m_furthestGoalTiles[i]->setGoalCost(i, 0);
+		sf::Vector2f goalTilePos = m_furthestGoalTiles[i]->getPosition();
+		m_furthestGoalTiles[i]->setDistanceToGoal(i, 0);
+		m_furthestGoalTiles[i]->setVerticalDistanctToGoal(i, 0);
 
 		std::queue<Tile*> tileQueue;
 
@@ -190,14 +192,14 @@ void Board::generateCosts()
 		while (!tileQueue.empty())
 		{
 			std::list<Tile*> neighbourList = tileQueue.front()->getNeighbours();
-			int currenCost = tileQueue.front()->getGoalCost(i);
 			std::list<Tile*>::iterator it;
 
 			for (it = neighbourList.begin(); it != neighbourList.end(); ++it)
 			{
-				if ((*it)->getGoalCost(i) == -1)
+				if ((*it)->getTotalGoalCost(i) == -2)
 				{
-					(*it)->setGoalCost(i, currenCost + 1);
+					(*it)->setDistanceToGoal(i, MyMath::distance(goalTilePos, (*it)->getPosition()));
+					(*it)->setVerticalDistanctToGoal(i, abs(goalTilePos.y - (*it)->getPosition().y));
 					tileQueue.push(*it);
 				}
 			}
@@ -279,6 +281,27 @@ bool Board::checkForWin(PieceType t_type)
 
 void Board::restart()
 {
-	//reset all pieces
+	for (Piece* piece : m_piecesRed)
+	{
+		piece->getTile()->setIsOccupied(false);
+		piece->setTile(nullptr);
+	}
 
+	for (Piece* piece : m_piecesGreen)
+	{
+		piece->getTile()->setIsOccupied(false);
+		piece->setTile(nullptr);
+	}
+
+	for (int i = 0; i < m_piecesGreen.size(); i++)
+	{
+		m_piecesGreen[i]->setTile(m_greenGoalTiles[i]);
+		m_greenGoalTiles[i]->setIsOccupied(true);
+	}
+
+	for (int i = 0; i < m_piecesRed.size(); i++)
+	{
+		m_piecesRed[i]->setTile(m_redGoalTiles[i]);
+		m_redGoalTiles[i]->setIsOccupied(true);
+	}
 }

@@ -1,4 +1,5 @@
 #pragma once
+
 enum class GameScreen
 {
 	MainScreen,
@@ -16,4 +17,3 @@ enum class AnimationMode
 	Appear,
 	Always
 };
-

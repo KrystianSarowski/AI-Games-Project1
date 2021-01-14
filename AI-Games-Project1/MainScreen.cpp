@@ -14,6 +14,7 @@ void MainScreen::update(sf::Time t_dt)
 		{
 			m_hud.setColor(m_hud.getColor() + sf::Color{ 0,0,0,5 });
 		}
+
 		else
 		{
 			m_animationState = AnimationMode::None;
@@ -26,13 +27,13 @@ void MainScreen::update(sf::Time t_dt)
 		{
 			m_hud.setColor(m_hud.getColor() - sf::Color{ 0,0,0,5 });
 		}
-		else if (m_hud.getColor().a <= 0)
+
+		else
 		{
-			m_gamescreen = GameScreen::OpponentSelect;
+			m_gameScreen = GameScreen::OpponentSelect;
 			m_animationState = AnimationMode::Appear;
 		}
 	}
-	
 }
 
 void MainScreen::render(sf::RenderWindow& t_window)
@@ -63,7 +64,7 @@ void MainScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 		{
 			if (t_event.key.code == sf::Mouse::Left)
 			{
-				m_gamescreen = GameScreen::Quit;
+				m_gameScreen = GameScreen::Quit;
 			}
 		}
 	}

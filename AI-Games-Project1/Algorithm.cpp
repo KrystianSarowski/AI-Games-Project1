@@ -41,6 +41,7 @@ int Algorithm::miniMax(Evaluation& t_evaluation, int t_typeIndex, int t_depth, b
                 tempEval.m_betaPruning = t_evaluation.m_betaPruning;
 
                 Tile* prevTile = pieces[i]->getTile();
+              
                 Piece* piece = pieces[i];
 
                 simulateMove(tempEval.m_piece, tempEval.m_targetTile);

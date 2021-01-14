@@ -4,8 +4,11 @@ Tile::Tile() :
 	m_isOccupied(false),
 	m_position(sf::Vector2f(0.0f,0.0f))
 {
-	m_goalCosts[0] = -1;
-	m_goalCosts[1] = -1;
+	m_distanceToGoals[0] = -1;
+	m_distanceToGoals[1] = -1;
+
+	m_verticalDistanceToGoals[0] = -1;
+	m_verticalDistanceToGoals[1] = -1;
 }
 
 void Tile::setPosition(sf::Vector2f t_pos)
@@ -29,11 +32,19 @@ void Tile::addNeighbour(Tile* t_neighbour)
 	}
 }
 
-void Tile::setGoalCost(int t_index, int t_cost)
+void Tile::setDistanceToGoal(int t_index, int t_cost)
 {
-	if (t_index < m_goalCosts.size())
+	if (t_index < m_distanceToGoals.size())
 	{
-		m_goalCosts[t_index] = t_cost;
+		m_distanceToGoals[t_index] = t_cost;
+	}
+}
+
+void Tile::setVerticalDistanctToGoal(int t_index, int t_cost)
+{
+	if (t_index < m_verticalDistanceToGoals.size())
+	{
+		m_verticalDistanceToGoals[t_index] = t_cost;
 	}
 }
 
@@ -79,7 +90,7 @@ bool Tile::getIsOccupied() const
 	return m_isOccupied;
 }
 
-int Tile::getGoalCost(int t_index) const
+int Tile::getTotalGoalCost(int t_index) const
 {
-	return m_goalCosts[t_index];
+	return m_distanceToGoals[t_index] + m_verticalDistanceToGoals[t_index];
 }

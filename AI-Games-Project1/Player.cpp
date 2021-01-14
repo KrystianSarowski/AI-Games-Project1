@@ -25,6 +25,11 @@ void Player::setMadeMove(bool t_madeMove)
 	m_madeMove = t_madeMove;
 }
 
+void Player::setControlledByAI(bool t_isControlledByAI)
+{
+	m_controlledByAI = t_isControlledByAI;
+}
+
 void Player::processTile(Tile* t_selectedTile)
 {
 	if (m_selectedPiece != nullptr)
@@ -86,6 +91,11 @@ bool Player::getMadeMove()
 	return m_madeMove;
 }
 
+bool Player::getControlledByAI()
+{
+	return m_controlledByAI;
+}
+
 std::vector<Piece*> Player::getPieces()
 {
 	return m_pieces;
@@ -94,4 +104,9 @@ std::vector<Piece*> Player::getPieces()
 std::list<Tile*> Player::getMoveList()
 {
 	return m_moveTiles;
+}
+
+std::string Player::getPlayerName()
+{
+	return m_name;
 }

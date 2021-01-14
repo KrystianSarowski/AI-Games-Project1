@@ -28,7 +28,10 @@ void Piece::setTile(Tile* t_newTile)
 {
 	m_tile = t_newTile;
 
-	m_body.setPosition(m_tile->getPosition());
+	if (m_tile != nullptr)
+	{
+		m_body.setPosition(m_tile->getPosition());
+	}
 }
 
 void Piece::render(sf::RenderWindow& t_window)

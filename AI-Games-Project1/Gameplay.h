@@ -15,21 +15,31 @@ public:
 	void processEvents(sf::Event& t_event, sf::Vector2f t_pos);
 	void start(GameScreen t_previousState);
 	void end();
-	void addPiecesToPlayers();
+
 private:
+	
 	void initialise();
-	int m_currentTurn = 0;
+	void addPiecesToPlayers();
+	
+	bool m_isGameOver{ false };
+	
+	int m_currentTurn{ 0 };
+	
 	Board m_board;
+	
 	Player* m_players[2];
-	Algorithm* m_ai;
-	Algorithm* m_theCoolerAI;
+	
+	Algorithm* m_ai[2];
+
 	sf::Sprite m_boardSprite;
+	
 	sf::Texture m_boardTexture;
-	bool isGameWon = false;
 
 	sf::Text m_gameoverText;
+	sf::Text m_returnText;
+
 	sf::RectangleShape m_gameoverHud;
 	sf::RectangleShape m_returnButton;
-	sf::Text m_returnText;
+
 };
 
