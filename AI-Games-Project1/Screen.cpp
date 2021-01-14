@@ -1,6 +1,10 @@
 #include "Screen.h"
 
-Screen::Screen(GameScreen& t_gamescreen) : m_gamescreen(t_gamescreen)
+GameplayStates Screen::s_gameplayState = GameplayStates::PlayerVsPlayer;
+
+Difficulty Screen::s_difficulty = Difficulty::Medium;
+
+Screen::Screen(GameScreen& t_gamescreen) : m_gameScreen(t_gamescreen)
 {
 	initialise();
 }

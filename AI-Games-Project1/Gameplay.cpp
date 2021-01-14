@@ -5,12 +5,14 @@ Gameplay::Gameplay(GameScreen& t_gameScreen) :
 	m_board(sf::Vector2u(800, 600))
 {
 	initialise();
+
 	m_players[0] = new Player(PieceType::RED, "Red");
 	m_players[1] = new Player(PieceType::GREEN, "Green");
 
-	m_ai = new Algorithm(m_players[0], &m_board);
-
-	m_theCoolerAI = new Algorithm(m_players[1], &m_board);
+	for (int i = 0; i < 2; i++)
+	{
+		m_ai[i] = new Algorithm(m_players[i], &m_board);
+	}
 
 	addPiecesToPlayers();
 }
@@ -23,6 +25,7 @@ void Gameplay::update(sf::Time t_dt)
 		{
 			m_hud.setColor(m_hud.getColor() + sf::Color{ 0,0,0,5 });
 		}
+
 		else
 		{
 			m_animationState = AnimationMode::None;
@@ -35,23 +38,19 @@ void Gameplay::update(sf::Time t_dt)
 		{
 			m_hud.setColor(m_hud.getColor() - sf::Color{ 0,0,0,5 });
 		}
-		else if (m_hud.getColor().a <= 0)
+
+		else
 		{
-			m_gamescreen = GameScreen::MainScreen;
+			m_gameScreen = GameScreen::MainScreen;
 			m_animationState = AnimationMode::Appear;
 		}
 	}
 	
-	if (!isGameWon)
+	if (!m_isGameOver)
 	{
-		if (m_currentTurn == 0)
+		if (m_players[m_currentTurn]->getControlledByAI())
 		{
-			m_ai->makeMove(t_dt);
-
-		}
-		else
-		{
-			m_theCoolerAI->makeMove(t_dt);
+			m_ai[m_currentTurn]->makeMove(t_dt);
 		}
 
 		if (m_players[m_currentTurn]->getMadeMove())
@@ -63,7 +62,7 @@ void Gameplay::update(sf::Time t_dt)
 			}
 			else
 			{
-				isGameWon = true;
+				m_isGameOver = true;
 
 				m_gameoverText.setString(m_players[m_currentTurn]->getPlayerName() + " Won");
 				sf::FloatRect textRect = m_gameoverText.getLocalBounds();
@@ -86,7 +85,7 @@ void Gameplay::render(sf::RenderWindow& t_window)
 		m_players[i]->render(t_window);
 	}
 
-	if (isGameWon)
+	if (m_isGameOver)
 	{
 		t_window.draw(m_gameoverHud);
 		t_window.draw(m_gameoverText);
@@ -97,33 +96,27 @@ void Gameplay::render(sf::RenderWindow& t_window)
 
 void Gameplay::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 {
-	if (m_currentTurn != 0)
+	if (t_event.type == sf::Event::MouseButtonPressed)
 	{
-		if (t_event.type == sf::Event::MouseButtonPressed)
+		if (t_event.key.code == sf::Mouse::Left)
 		{
-			if (t_event.key.code == sf::Mouse::Left)
+			if (!m_isGameOver)
 			{
-				if (!isGameWon) 
+				if (!m_players[m_currentTurn]->getControlledByAI())
 				{
 					Tile* selectedTile = m_board.selectTile(t_pos);
 
 					if (selectedTile != nullptr)
 					{
+						m_selectSound.play();
 						m_players[m_currentTurn]->processTile(selectedTile);
 					}
 				}
-				
-
 			}
-		}
-	}
-	if (isGameWon) 
-	{
-		if (m_returnButton.getGlobalBounds().contains(t_pos))
-		{
-			if (t_event.type == sf::Event::MouseButtonPressed)
+
+			else
 			{
-				if (t_event.key.code == sf::Mouse::Left)
+				if (m_returnButton.getGlobalBounds().contains(t_pos))
 				{
 					m_animationState = AnimationMode::Disappear;
 				}
@@ -133,14 +126,33 @@ void Gameplay::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		isGameWon = true;
+		m_isGameOver = true;
 	}
 }
 
 void Gameplay::start(GameScreen t_previousState)
 {
-	isGameWon = false;
+	m_isGameOver = false;
+	m_currentTurn = 0;
 	m_board.restart();
+
+	switch (s_gameplayState)
+	{
+	case GameplayStates::PlayerVsAi:
+		m_players[0]->setControlledByAI(false);
+		m_players[1]->setControlledByAI(true);
+		break;
+	case GameplayStates::AiVsAi:
+		m_players[0]->setControlledByAI(true);
+		m_players[1]->setControlledByAI(true);
+		break;
+	case GameplayStates::PlayerVsPlayer:
+		m_players[0]->setControlledByAI(false);
+		m_players[1]->setControlledByAI(false);
+		break;
+	default:
+		break;
+	}
 }
 
 void Gameplay::end()
@@ -188,6 +200,13 @@ void Gameplay::initialise()
 	sf::FloatRect textRect = m_returnText.getLocalBounds();
 	m_returnText.setOrigin(textRect.width / 2.0f, textRect.height / 1.5f);
 	m_returnText.setPosition(400, 350);
+
+	//select sound
+	if (!m_soundBuff.loadFromFile("Audio/select.ogg"))
+	{
+		std::cout << "select sound did not load" << std::endl;
+	}
+	m_selectSound.setBuffer(m_soundBuff);
 }
 
 void Gameplay::addPiecesToPlayers()

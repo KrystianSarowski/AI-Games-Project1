@@ -28,7 +28,7 @@ void DifficultyScreen::update(sf::Time t_dt)
 		}
 		else if (m_hud.getColor().a <= 0)
 		{
-			m_gamescreen = GameScreen::Gameplay;
+			m_gameScreen = GameScreen::Gameplay;
 			m_animationState = AnimationMode::Appear;
 		}
 	}
@@ -57,7 +57,7 @@ void DifficultyScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				m_difficulty = Difficulty::Easy;
+				s_difficulty = Difficulty::Easy;
 			}
 		}
 	}
@@ -70,7 +70,7 @@ void DifficultyScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				m_difficulty = Difficulty::Medium;
+				s_difficulty = Difficulty::Medium;
 			}
 		}
 	}
@@ -83,7 +83,7 @@ void DifficultyScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				m_difficulty = Difficulty::Hard;
+				s_difficulty = Difficulty::Hard;
 			}
 		}
 	}

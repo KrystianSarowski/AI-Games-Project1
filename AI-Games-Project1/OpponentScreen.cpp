@@ -28,7 +28,7 @@ void OpponentScreen::update(sf::Time t_dt)
 		}
 		else if (m_hud.getColor().a <= 0)
 		{
-			m_gamescreen = GameScreen::Difficulty;
+			m_gameScreen = GameScreen::Difficulty;
 			m_animationState = AnimationMode::Appear;
 		}
 	}
@@ -56,7 +56,7 @@ void OpponentScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				m_gameplayState = GameplayStates::PlayerVsAi;
+				s_gameplayState = GameplayStates::PlayerVsAi;
 			}
 		}
 	}
@@ -69,7 +69,7 @@ void OpponentScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				m_gameplayState = GameplayStates::AiVsAi;
+				s_gameplayState = GameplayStates::AiVsAi;
 			}
 		}
 	}
@@ -82,7 +82,7 @@ void OpponentScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				m_gameplayState = GameplayStates::PlayerVsPlayer;
+				s_gameplayState = GameplayStates::PlayerVsPlayer;
 			}
 		}
 	}

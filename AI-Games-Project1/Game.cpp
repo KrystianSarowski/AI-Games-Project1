@@ -8,7 +8,16 @@ Game::Game() : m_window{ sf::VideoMode{ 800, 600, 32 }, "Chinese Checkers" }
 	m_screens.push_back(new OpponentScreen(m_currentState));
 	m_screens.push_back(new DifficultyScreen(m_currentState));
 	m_screens.push_back(new Gameplay(m_currentState));
+	
+	if (!m_bgMusic.openFromFile("Audio/bgMusic.ogg"))
+	{
+		std::cout << "Music did not load" << std::endl;
+	}
+	m_bgMusic.setLoop(true);
+	m_bgMusic.play();
+	m_bgMusic.setVolume(30);
 }
+
 
 void Game::start()
 {

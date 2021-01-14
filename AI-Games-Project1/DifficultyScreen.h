@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Screen.h"
 #include "enum.h"
+
 class DifficultyScreen : public Screen
 {
 public:
@@ -26,4 +27,3 @@ private:
 	sf::Text m_hText;
 
 };
-

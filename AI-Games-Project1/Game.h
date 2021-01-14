@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "MainScreen.h"
 #include "OpponentScreen.h"
 #include "DifficultyScreen.h"
@@ -17,7 +18,7 @@ private:
 	void update(sf::Time dt);
 	void processEvents();
 	void render();
-
+	sf::Music m_bgMusic;
 	sf::RenderWindow m_window;
 	std::vector<Screen*> m_screens;
 	GameScreen m_currentState;

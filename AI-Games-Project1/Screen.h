@@ -2,14 +2,15 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "enum.h"
-static enum class GameplayStates
+
+enum class GameplayStates
 {
 	PlayerVsAi,
 	AiVsAi,
 	PlayerVsPlayer
 };
 
-static enum class Difficulty
+enum class Difficulty
 {
 	Easy,
 	Medium,
@@ -19,17 +20,24 @@ static enum class Difficulty
 class Screen
 {
 public:
+
 	Screen(GameScreen &t_gamescreen);
 	virtual void update(sf::Time t_dt);
 	virtual void render(sf::RenderWindow& t_window);
 	virtual void processEvents(sf::Event& t_event, sf::Vector2f t_pos);
 	virtual void start(GameScreen t_previousState);
 	virtual void end();
+
 protected:
-	GameScreen & m_gamescreen;
+	
+	static GameplayStates s_gameplayState;
+	
+	static Difficulty s_difficulty;
+
+	GameScreen &m_gameScreen;
+	
 	sf::Texture m_texture;
-	GameplayStates m_gameplayState;
-	Difficulty m_difficulty;
+
 	sf::Sprite m_hud;
 
 	sf::Font m_font;
@@ -41,4 +49,3 @@ protected:
 	virtual void initialise();
 	virtual void setPosition(sf::Vector2f t_postion);
 };
-
