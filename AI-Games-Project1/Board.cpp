@@ -280,5 +280,4 @@ bool Board::checkForWin(PieceType t_type)
 void Board::restart()
 {
 	//reset all pieces
-
 }

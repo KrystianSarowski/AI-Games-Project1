@@ -32,7 +32,6 @@ void OpponentScreen::update(sf::Time t_dt)
 			m_animationState = AnimationMode::Appear;
 		}
 	}
-	
 }
 
 void OpponentScreen::render(sf::RenderWindow& t_window)

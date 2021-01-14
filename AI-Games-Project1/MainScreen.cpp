@@ -32,7 +32,6 @@ void MainScreen::update(sf::Time t_dt)
 			m_animationState = AnimationMode::Appear;
 		}
 	}
-	
 }
 
 void MainScreen::render(sf::RenderWindow& t_window)
