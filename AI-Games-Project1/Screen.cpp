@@ -2,9 +2,9 @@
 
 GameplayStates Screen::s_gameplayState = GameplayStates::PlayerVsPlayer;
 
-Difficulty Screen::s_difficulty = Difficulty::Medium;
+Difficulty Screen::s_difficulty = Difficulty::Normal;
 
-Screen::Screen(GameScreen& t_gamescreen) : m_gameScreen(t_gamescreen)
+Screen::Screen(GameScreen& t_gameScreen) : m_gameScreen(t_gameScreen)
 {
 	initialise();
 }

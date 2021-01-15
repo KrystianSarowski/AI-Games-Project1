@@ -67,7 +67,7 @@ void DifficultyScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			if (t_event.key.code == sf::Mouse::Left)
 			{
 				m_animationState = AnimationMode::Disappear;
-				s_difficulty = Difficulty::Medium;
+				s_difficulty = Difficulty::Normal;
 			}
 		}
 	}

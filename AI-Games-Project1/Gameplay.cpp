@@ -19,33 +19,8 @@ Gameplay::Gameplay(GameScreen& t_gameScreen) :
 
 void Gameplay::update(sf::Time t_dt)
 {
-	if (m_animationState == AnimationMode::Appear)
-	{
-		if (m_hud.getColor().a < 255)
-		{
-			m_hud.setColor(m_hud.getColor() + sf::Color{ 0,0,0,5 });
-		}
+	backgroundAnimation();
 
-		else
-		{
-			m_animationState = AnimationMode::None;
-		}
-	}
-
-	if (m_animationState == AnimationMode::Disappear)
-	{
-		if (m_hud.getColor().a > 0)
-		{
-			m_hud.setColor(m_hud.getColor() - sf::Color{ 0,0,0,5 });
-		}
-
-		else
-		{
-			m_gameScreen = GameScreen::MainScreen;
-			m_animationState = AnimationMode::Appear;
-		}
-	}
-	
 	if (!m_isGameOver)
 	{
 		if (m_players[m_currentTurn]->getControlledByAI())
@@ -125,7 +100,7 @@ void Gameplay::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 		}
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
 		m_isGameOver = true;
 	}
@@ -229,5 +204,35 @@ void Gameplay::addPiecesToPlayers()
 	for (Piece* piece : pieces)
 	{
 		m_players[1]->addPiece(piece);
+	}
+}
+
+void Gameplay::backgroundAnimation()
+{
+	if (m_animationState == AnimationMode::Appear)
+	{
+		if (m_hud.getColor().a < 255)
+		{
+			m_hud.setColor(m_hud.getColor() + sf::Color{ 0,0,0,5 });
+		}
+
+		else
+		{
+			m_animationState = AnimationMode::None;
+		}
+	}
+
+	if (m_animationState == AnimationMode::Disappear)
+	{
+		if (m_hud.getColor().a > 0)
+		{
+			m_hud.setColor(m_hud.getColor() - sf::Color{ 0,0,0,5 });
+		}
+
+		else
+		{
+			m_gameScreen = GameScreen::MainScreen;
+			m_animationState = AnimationMode::Appear;
+		}
 	}
 }

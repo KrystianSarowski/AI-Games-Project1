@@ -50,8 +50,7 @@ void Game::update(sf::Time dt)
 
 		if (m_currentState != m_previousState && m_currentState != GameScreen::Quit)
 		{
-			m_screens[static_cast<int>(m_previousState)]->end();
-			m_screens[static_cast<int>(m_currentState)]->start(m_previousState);
+			m_screens[static_cast<int>(m_currentState)]->start();
 
 			m_previousState = m_currentState;
 		}
