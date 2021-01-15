@@ -23,9 +23,6 @@ enum class Difficulty
 };
 
 
-/// This is the Screen Class.
-/// 
-/// Parent class to all other screens.
 class Screen
 {
 public:

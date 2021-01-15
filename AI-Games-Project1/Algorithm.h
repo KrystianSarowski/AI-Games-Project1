@@ -14,7 +14,6 @@ struct Evaluation
 	int m_betaPruning = INT_MAX;
 };
 
-
 class Algorithm 
 {
 public:
@@ -30,7 +29,7 @@ public:
 	/// @brief Makes a move for the player its controlling using the evaluation from MiniMax.
 	/// 
 	/// Calls the function calculateMove() to make the move for the controlled player.
-	/// After the calcualteMove() finishes the function waits until sufficente enough time
+	/// After the calculateMove() finishes the function waits until sufficente enough time
 	/// has passed and move's the piece to target location ending its turn using Player::processTile(Tile* t_selectedTile).
 	/// @see calculateMove(), Player::processTile(Tile* t_selectedTile)
 	/// @param t_dt The time that has passed since last update. 

@@ -6,9 +6,6 @@
 #include "Algorithm.h"
 #include "Board.h"
 
-/// This is the Gameplay Screen class.
-/// 
-/// Child of Screen class.
 class Gameplay : public Screen
 {
 public:
@@ -73,7 +70,7 @@ private:
 	/// @brief Adds the pieces to the Players.
 	/// 
 	/// Adds the coloured pieces to each player based on its PieceType.
-	/// @see Board::getPieces(PieceType), Player::AddPiece(*Piece).
+	/// @see Board::getPieces(PieceType), Player::addPiece(*Piece).
 	void addPiecesToPlayers();
 	
 	/// <summary>

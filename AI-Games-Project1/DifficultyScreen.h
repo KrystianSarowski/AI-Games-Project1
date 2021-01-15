@@ -3,9 +3,6 @@
 #include "Screen.h"
 #include "enum.h"
 
-/// This is the DifficultyScreen Class.
-/// 
-/// Child of the Screen class.
 class DifficultyScreen : public Screen
 {
 public:

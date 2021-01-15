@@ -2,9 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Screen.h"
 #include "enum.h"
-/// This is MainScreen class
-/// 
-/// Child of Screen
+
 class MainScreen : public Screen
 {
 public:

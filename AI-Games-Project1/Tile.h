@@ -5,9 +5,6 @@
 #include <array>
 #include <math.h>
 
-/// This is the Tile Class.
-/// 
-/// Fragment of the board where the pieces can traverse .
 class Tile
 {
 public:
