@@ -70,14 +70,6 @@ void MainScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 	}
 }
 
-void MainScreen::start(GameScreen t_previousState)
-{
-}
-
-void MainScreen::end()
-{
-}
-
 void MainScreen::initialise()
 {
 	if (!m_texture.loadFromFile("Images/mainScreen.png"))

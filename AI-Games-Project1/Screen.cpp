@@ -2,7 +2,7 @@
 
 GameplayStates Screen::s_gameplayState = GameplayStates::PlayerVsPlayer;
 
-Difficulty Screen::s_difficulty = Difficulty::Medium;
+Difficulty Screen::s_difficulty = Difficulty::Normal;
 
 Screen::Screen(GameScreen& t_gamescreen) : m_gameScreen(t_gamescreen)
 {
@@ -24,11 +24,7 @@ void Screen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 
 }
 
-void Screen::start(GameScreen t_previousState)
-{
-}
-
-void Screen::end()
+void Screen::start()
 {
 
 }

@@ -14,8 +14,7 @@ public:
 	void update(sf::Time t_dt);
 	void render(sf::RenderWindow& t_window);
 	void processEvents(sf::Event& t_event, sf::Vector2f t_pos);
-	void start(GameScreen t_previousState);
-	void end();
+	void start();
 
 private:
 	
@@ -40,6 +39,7 @@ private:
 
 	sf::Text m_gameoverText;
 	sf::Text m_returnText;
+	sf::Text m_currentTurnText;
 
 	sf::RectangleShape m_gameoverHud;
 	sf::RectangleShape m_returnButton;

@@ -22,6 +22,7 @@ public:
 	Algorithm(Player* t_player, Board* t_board);
 
 	void makeMove(sf::Time t_dt);
+	void reset();
 
 	static void setPredictionDepth(int t_depth);
 

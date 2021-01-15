@@ -139,6 +139,11 @@ void Algorithm::makeMove(sf::Time t_dt)
     }
 }
 
+void Algorithm::reset()
+{
+    m_moveCalculated = false;
+}
+
 void Algorithm::setPredictionDepth(int t_depth)
 {
     s_predictionDepth = t_depth;

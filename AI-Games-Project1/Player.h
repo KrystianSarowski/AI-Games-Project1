@@ -14,7 +14,7 @@ public:
 	void processTile(Tile* t_selectedTile);
 	void render(sf::RenderWindow& t_window);
 	void clearSelection();
-	
+
 	bool getMadeMove();
 	bool getControlledByAI();
 

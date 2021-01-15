@@ -15,7 +15,7 @@ Game::Game() : m_window{ sf::VideoMode{ 800, 600, 32 }, "Chinese Checkers" }
 	}
 	m_bgMusic.setLoop(true);
 	m_bgMusic.play();
-	m_bgMusic.setVolume(30);
+	m_bgMusic.setVolume(10);
 }
 
 
@@ -31,12 +31,12 @@ void Game::start()
 		timeSinceLastUpdate += clock.getElapsedTime();
 		
 		if (timeSinceLastUpdate > timePerFrame)
-		{
-			processEvents();							//At least 60 fps
-			update(timePerFrame);						//60 fps
+		{							
+			update(timePerFrame);						
 			timeSinceLastUpdate -= timePerFrame;
 			clock.restart();
 		}
+
 		render();										//As many as possible
 	}
 }
@@ -50,8 +50,7 @@ void Game::update(sf::Time dt)
 
 		if (m_currentState != m_previousState && m_currentState != GameScreen::Quit)
 		{
-			m_screens[static_cast<int>(m_previousState)]->end();
-			m_screens[static_cast<int>(m_currentState)]->start(m_previousState);
+			m_screens[static_cast<int>(m_currentState)]->start();
 
 			m_previousState = m_currentState;
 		}
@@ -90,4 +89,3 @@ void Game::render()
 	m_window.display();
 
 }
-

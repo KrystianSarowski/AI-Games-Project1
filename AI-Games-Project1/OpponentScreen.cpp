@@ -28,7 +28,13 @@ void OpponentScreen::update(sf::Time t_dt)
 		}
 		else if (m_hud.getColor().a <= 0)
 		{
-			m_gameScreen = GameScreen::Difficulty;
+			if (s_gameplayState == GameplayStates::PlayerVsPlayer)
+			{
+				m_gameScreen = GameScreen::Gameplay;
+			}
+			else
+				m_gameScreen = GameScreen::Difficulty;
+
 			m_animationState = AnimationMode::Appear;
 		}
 	}
@@ -86,16 +92,6 @@ void OpponentScreen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 			}
 		}
 	}
-}
-
-void OpponentScreen::start(GameScreen t_previousState)
-{
-
-}
-
-void OpponentScreen::end()
-{
-
 }
 
 void OpponentScreen::initialise()
