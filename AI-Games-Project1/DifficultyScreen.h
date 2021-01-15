@@ -25,7 +25,7 @@ public:
 	/// @brief Render Function.
 	/// 
 	/// Draws the background, buttons and text.
-	///@param t_window This is the the render window.
+	///	@param t_window This is the the render window.
 	void render(sf::RenderWindow& t_window);
 
 	/// @brief Proccess Events within the current screen.
