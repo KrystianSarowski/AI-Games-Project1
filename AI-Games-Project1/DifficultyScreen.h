@@ -3,7 +3,7 @@
 #include "Screen.h"
 #include "enum.h"
 
-/// This is the Difficulty Screen Class.
+/// This is the DifficultyScreen Class.
 /// 
 /// Child of the Screen class.
 class DifficultyScreen : public Screen
@@ -12,9 +12,9 @@ public:
 	/// @brief Constructor of the Difficulty Screen.
 	/// 
 	/// This contructor assigns the gamescreen variable to the passed in enum constant. It calls the initialise function.
-	/// @see initialise().
-	/// @param gamescreen This is the enum varaible of current screen. 
-	DifficultyScreen(GameScreen& gamescreen);
+	/// @see initialise(), GameScreen
+	/// @param t_gameScreen This is a reference to the enum varaible of current screen. 
+	DifficultyScreen(GameScreen& t_gameScreen);
 
 	/// @brief Updates the current screen.
 	/// 
@@ -30,13 +30,15 @@ public:
 
 	/// @brief Proccess Events within the current screen.
 	/// 
-	/// Checks if the buttons are pressed.
+	/// Checks if the buttons are pressed. If pressed, they change to the corresponding difficulty.
+	/// m_eButton -> changes s_difficulty to easy, m_mButton -> changes s_difficulty to Normal
 	/// @param t_event The event that is used in this screen.
 	/// @param t_pos The current position of the mouse cursor.
+	/// @see s_difficulty
 	void processEvents(sf::Event& t_event, sf::Vector2f t_pos);
 
 private:
-	/// @brief Initialses the background.
+	/// @brief Initialses screen
 	/// 
 	/// Sets up the m_hud's background texture and resets its alpha value to 0. Calls functions setupButtons() and setupText().
 	void initialise();
