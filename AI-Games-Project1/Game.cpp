@@ -15,7 +15,7 @@ Game::Game() : m_window{ sf::VideoMode{ 800, 600, 32 }, "Chinese Checkers" }
 	}
 	m_bgMusic.setLoop(true);
 	m_bgMusic.play();
-	m_bgMusic.setVolume(30);
+	m_bgMusic.setVolume(10);
 }
 
 

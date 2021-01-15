@@ -9,8 +9,6 @@ public:
 	void update(sf::Time t_dt);
 	void render(sf::RenderWindow& t_window);
 	void processEvents(sf::Event& t_event, sf::Vector2f t_pos);
-	void start(GameScreen t_previousState);
-	void end();
 	
 private:
 	void initialise();

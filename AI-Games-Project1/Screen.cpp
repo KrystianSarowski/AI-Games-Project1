@@ -24,11 +24,7 @@ void Screen::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 
 }
 
-void Screen::start(GameScreen t_previousState)
-{
-}
-
-void Screen::end()
+void Screen::start()
 {
 
 }

@@ -59,6 +59,7 @@ void Gameplay::update(sf::Time t_dt)
 			{
 				m_currentTurn = (m_currentTurn + 1) % 2;
 				m_players[m_currentTurn]->setMadeMove(false);
+				m_currentTurnText.setString(m_players[m_currentTurn]->getPlayerName() + "'s turn");
 			}
 			else
 			{
@@ -79,6 +80,7 @@ void Gameplay::render(sf::RenderWindow& t_window)
 	t_window.draw(m_hud);
 	t_window.draw(m_boardSprite);
 	m_board.render(t_window);
+	t_window.draw(m_currentTurnText);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -113,7 +115,6 @@ void Gameplay::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 					}
 				}
 			}
-
 			else
 			{
 				if (m_returnButton.getGlobalBounds().contains(t_pos))
@@ -130,7 +131,7 @@ void Gameplay::processEvents(sf::Event& t_event, sf::Vector2f t_pos)
 	}
 }
 
-void Gameplay::start(GameScreen t_previousState)
+void Gameplay::start()
 {
 	m_isGameOver = false;
 	m_currentTurn = 0;
@@ -153,10 +154,7 @@ void Gameplay::start(GameScreen t_previousState)
 	default:
 		break;
 	}
-}
-
-void Gameplay::end()
-{
+	m_currentTurnText.setString(m_players[m_currentTurn]->getPlayerName() + "'s turn");
 }
 
 void Gameplay::initialise()
@@ -200,6 +198,14 @@ void Gameplay::initialise()
 	sf::FloatRect textRect = m_returnText.getLocalBounds();
 	m_returnText.setOrigin(textRect.width / 2.0f, textRect.height / 1.5f);
 	m_returnText.setPosition(400, 350);
+
+	m_currentTurnText.setString("");
+	m_currentTurnText.setFillColor(sf::Color::White);
+	m_currentTurnText.setCharacterSize(20.0f);
+	m_currentTurnText.setFont(m_font);
+	textRect = m_currentTurnText.getLocalBounds();
+	m_currentTurnText.setOrigin(0, textRect.height / 1.5f);
+	m_currentTurnText.setPosition(20, 20);
 
 	//select sound
 	if (!m_soundBuff.loadFromFile("Audio/select.ogg"))

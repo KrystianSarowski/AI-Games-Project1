@@ -13,8 +13,7 @@ enum class GameplayStates
 enum class Difficulty
 {
 	Easy,
-	Medium,
-	Hard
+	Medium
 };
 
 class Screen
@@ -25,8 +24,7 @@ public:
 	virtual void update(sf::Time t_dt);
 	virtual void render(sf::RenderWindow& t_window);
 	virtual void processEvents(sf::Event& t_event, sf::Vector2f t_pos);
-	virtual void start(GameScreen t_previousState);
-	virtual void end();
+	virtual void start();
 
 protected:
 	
