@@ -23,19 +23,15 @@ private:
 
 	void createGrid(sf::Vector2u t_windowSize);
 	void connectTiles();
-	void generateCosts();
+	void generateDistanceCosts(std::vector<Tile*> t_furthestGoalTiles);
 	void createPieces();
 
 	std::vector<Tile*> m_grid;
-	std::vector<Tile*> m_greenGoalTiles;
-	std::vector<Tile*> m_redGoalTiles;
 
-	std::vector<Piece*> m_piecesGreen;
-	std::vector<Piece*> m_piecesRed;
+	std::vector<std::vector<Tile*>> m_goalTiles;
+	std::vector<std::vector<Piece*>> m_pieces;
 
-	std::array<Tile*, 2> m_furthestGoalTiles;
-
-	const float m_TILE_RADIUS{ 15.0f };;
+	const float m_TILE_RADIUS{ 15.0f };
 	const int m_MAX_ROW_LENGTH{ 13 };
-};
 
+};

@@ -1,7 +1,6 @@
 #pragma once
 #include "Piece.h"
 
-
 class Player
 {
 public:
@@ -19,15 +18,17 @@ public:
 	bool getMadeMove();
 	bool getControlledByAI();
 
+	PieceType getOwnedPieceType();
+
 	std::string getPlayerName();
 	std::vector<Piece*> getPieces();
 	std::list<Tile*> getMoveList();
 
-	PieceType m_ownedType;
-
 private:
 
 	std::string m_name;
+	PieceType m_ownedType;
+
 	std::vector<Piece*> m_pieces;
 	std::list<Tile*> m_moveTiles;
 

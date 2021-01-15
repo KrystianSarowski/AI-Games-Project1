@@ -55,11 +55,12 @@ void Gameplay::update(sf::Time t_dt)
 
 		if (m_players[m_currentTurn]->getMadeMove())
 		{
-			if (!m_board.checkForWin(m_players[m_currentTurn]->m_ownedType))
+			if (!m_board.checkForWin(m_players[m_currentTurn]->getOwnedPieceType()))
 			{
 				m_currentTurn = (m_currentTurn + 1) % 2;
 				m_players[m_currentTurn]->setMadeMove(false);
 			}
+
 			else
 			{
 				m_isGameOver = true;
@@ -153,6 +154,21 @@ void Gameplay::start(GameScreen t_previousState)
 	default:
 		break;
 	}
+
+	switch (s_difficulty)
+	{
+	case Difficulty::Easy:
+		Algorithm::setPredictionDepth(1);
+		break;
+	case Difficulty::Medium:
+		Algorithm::setPredictionDepth(1);
+		break;
+	case Difficulty::Hard:
+		Algorithm::setPredictionDepth(3);
+		break;
+	default:
+		break;
+	}
 }
 
 void Gameplay::end()
@@ -178,6 +194,7 @@ void Gameplay::initialise()
 	m_boardSprite.setPosition(400, 300);
 	m_boardSprite.setOrigin(m_boardSprite.getGlobalBounds().width / 2, m_boardSprite.getGlobalBounds().height / 2);
 	m_boardSprite.setScale(0.8, 0.8);
+	
 	//gameover text
 	m_gameoverText.setFillColor(sf::Color::White);
 	m_gameoverText.setCharacterSize(40.0f);
@@ -211,17 +228,13 @@ void Gameplay::initialise()
 
 void Gameplay::addPiecesToPlayers()
 {
-	std::vector<Piece*> pieces = m_board.getPieces(PieceType::RED);
-
-	for (Piece* piece : pieces)
+	for (int i = 0; i < 2; i++)
 	{
-		m_players[0]->addPiece(piece);
-	}
+		std::vector<Piece*> pieces = m_board.getPieces(static_cast<PieceType>(i));
 
-	pieces = m_board.getPieces(PieceType::GREEN);
-
-	for (Piece* piece : pieces)
-	{
-		m_players[1]->addPiece(piece);
+		for (Piece* piece : pieces)
+		{
+			m_players[i]->addPiece(piece);
+		}
 	}
 }

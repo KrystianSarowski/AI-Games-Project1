@@ -96,6 +96,11 @@ bool Player::getControlledByAI()
 	return m_controlledByAI;
 }
 
+PieceType Player::getOwnedPieceType()
+{
+	return m_ownedType;
+}
+
 std::vector<Piece*> Player::getPieces()
 {
 	return m_pieces;

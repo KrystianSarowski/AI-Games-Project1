@@ -3,8 +3,6 @@
 Board::Board(sf::Vector2u t_windowSize)
 {
 	createGrid(t_windowSize);
-	connectTiles();
-	generateCosts();
 	createPieces();
 }
 
@@ -30,32 +28,25 @@ void Board::render(sf::RenderWindow& t_window)
 	tile.setFillColor(sf::Color(128, 128, 128));
 	tile.setOutlineThickness(3.0f);
 	tile.setOutlineColor(sf::Color::Black);
+	
 	for (int i = 0; i < m_grid.size(); i++)
 	{
 		tile.setPosition(m_grid[i]->getPosition());
 		t_window.draw(tile);
 	}
 
-	for (int j = 0; j < m_piecesGreen.size(); j++)
+	for (int i = 0; i < m_pieces.size(); i++)
 	{
-		m_piecesGreen[j]->render(t_window);
-		m_piecesRed[j]->render(t_window);
+		for (int j = 0; j < m_pieces[i].size(); j++)
+		{
+			m_pieces[i][j]->render(t_window);
+		}
 	}
 }
 
 std::vector<Piece*> Board::getPieces(PieceType t_type)
 {
-	if (t_type == PieceType::GREEN)
-	{
-		return m_piecesGreen;
-	}
-
-	else
-	{
-		return m_piecesRed;
-	}
-
-	return std::vector<Piece*>();
+	return m_pieces[static_cast<int>(t_type)];
 }
 
 int Board::calculateValue(PieceType t_type)
@@ -63,30 +54,17 @@ int Board::calculateValue(PieceType t_type)
 	int totalValue1 = 0;
 	int totalValue2 = 0;
 
-	if (t_type == PieceType::GREEN)
-	{
-		for (int i = 0; i < m_piecesGreen.size(); i++)
-		{
-			totalValue1 += m_piecesGreen[i]->getTile()->getTotalGoalCost(static_cast<int>(PieceType::GREEN));
-		}
+	int typeIndex1 = static_cast<int>(t_type);
+	int typeIndex2 = (typeIndex1 + 1) % 2;
 
-		for (int j = 0; j < m_piecesRed.size(); j++)
-		{
-			totalValue2 += m_piecesRed[j]->getTile()->getTotalGoalCost(static_cast<int>(PieceType::RED));
-		}
+	for (int i = 0; i < m_pieces[typeIndex1].size(); i++)
+	{
+		totalValue1 += m_pieces[typeIndex1][i]->getTile()->getTotalGoalCost(typeIndex2);
 	}
 
-	else
+	for (int i = 0; i < m_pieces[typeIndex2].size(); i++)
 	{
-		for (int i = 0; i < m_piecesGreen.size(); i++)
-		{
-			totalValue2 += m_piecesGreen[i]->getTile()->getTotalGoalCost(static_cast<int>(PieceType::GREEN));
-		}
-
-		for (int j = 0; j < m_piecesRed.size(); j++)
-		{
-			totalValue1 += m_piecesRed[j]->getTile()->getTotalGoalCost(static_cast<int>(PieceType::RED));
-		}
+		totalValue2 += m_pieces[typeIndex2][i]->getTile()->getTotalGoalCost(typeIndex1);
 	}
 
 	return totalValue2 - totalValue1;
@@ -98,8 +76,12 @@ void Board::createGrid(sf::Vector2u t_windowSize)
 	float offSetY = offSetX * sinf(3.14f / 3);
 
 	sf::Vector2f startPos;
+
 	startPos.x = (t_windowSize.x - (offSetX * m_MAX_ROW_LENGTH)) / 2 + (offSetX / 2);
 	startPos.y = (t_windowSize.y - (offSetY * (m_MAX_ROW_LENGTH - 5))) / 2;
+
+	std::vector<Tile*> furthestTiles;
+	std::vector<Tile*> greenGoalTiles;
 
 	for (int count = m_MAX_ROW_LENGTH; count > 0; count--)
 	{
@@ -115,16 +97,19 @@ void Board::createGrid(sf::Vector2u t_windowSize)
 
 			if (count < 5)
 			{
-				m_greenGoalTiles.push_back(tile);
+				greenGoalTiles.push_back(tile);
 			}
 
 			m_grid.push_back(tile);
 		}
 	}
 
-	m_furthestGoalTiles[0] = m_grid[m_grid.size() - 1];
+	m_goalTiles.push_back(greenGoalTiles);
+	furthestTiles.push_back(m_grid[m_grid.size() - 1]);
 
 	startPos.y = startPos.y + offSetY * (m_MAX_ROW_LENGTH - 5);
+
+	std::vector<Tile*> redGoalTiles;
 
 	for (int count = m_MAX_ROW_LENGTH; count > 0; count--)
 	{
@@ -147,7 +132,7 @@ void Board::createGrid(sf::Vector2u t_windowSize)
 			{
 				if (count < 5)
 				{
-					m_redGoalTiles.push_back(tile);
+					redGoalTiles.push_back(tile);
 				}
 
 				m_grid.push_back(tile);
@@ -155,7 +140,11 @@ void Board::createGrid(sf::Vector2u t_windowSize)
 		}
 	}
 
-	m_furthestGoalTiles[1] = m_grid[m_grid.size() - 1];
+	m_goalTiles.push_back(redGoalTiles);
+	furthestTiles.push_back(m_grid[m_grid.size() - 1]);
+
+	connectTiles();
+	generateDistanceCosts(furthestTiles);
 }
 
 void Board::connectTiles()
@@ -177,17 +166,17 @@ void Board::connectTiles()
 	}
 }
 
-void Board::generateCosts()
+void Board::generateDistanceCosts(std::vector<Tile*> t_furthestGoalTiles)
 {
-	for (int i = 0; i < m_furthestGoalTiles.size(); i++)
+	for (int i = 0; i < t_furthestGoalTiles.size(); i++)
 	{
-		sf::Vector2f goalTilePos = m_furthestGoalTiles[i]->getPosition();
-		m_furthestGoalTiles[i]->setDistanceToGoal(i, 0);
-		m_furthestGoalTiles[i]->setVerticalDistanctToGoal(i, 0);
+		sf::Vector2f goalTilePos = t_furthestGoalTiles[i]->getPosition();
+		t_furthestGoalTiles[i]->setDistanceToGoal(i, 0);
+		t_furthestGoalTiles[i]->setVerticalDistanctToGoal(i, 0);
 
 		std::queue<Tile*> tileQueue;
 
-		tileQueue.push(m_furthestGoalTiles[i]);
+		tileQueue.push(t_furthestGoalTiles[i]);
 
 		while (!tileQueue.empty())
 		{
@@ -211,24 +200,23 @@ void Board::generateCosts()
 
 void Board::createPieces()
 {
-	for (Tile* goalTile : m_greenGoalTiles)
+	for (int i = 0; i < m_goalTiles.size(); i++)
 	{
-		Piece* newPiece = new Piece();
-		newPiece->setType(PieceType::GREEN);
-		newPiece->setTile(goalTile);
-		goalTile->setIsOccupied(true);
+		PieceType pieceType = static_cast<PieceType>(i);
 
-		m_piecesGreen.push_back(newPiece);
-	}
+		std::vector<Piece*> colouredPieces;
 
-	for (Tile* goalTile : m_redGoalTiles)
-	{
-		Piece* newPiece = new Piece();
-		newPiece->setType(PieceType::RED);
-		newPiece->setTile(goalTile);
-		goalTile->setIsOccupied(true);
+		for (Tile* goalTile : m_goalTiles[i])
+		{
+			Piece* newPiece = new Piece();
+			newPiece->setType(pieceType);
+			newPiece->setTile(goalTile);
+			goalTile->setIsOccupied(true);
 
-		m_piecesRed.push_back(newPiece);
+			colouredPieces.push_back(newPiece);
+		}
+
+		m_pieces.push_back(colouredPieces);
 	}
 }
 
@@ -236,44 +224,24 @@ bool Board::checkForWin(PieceType t_type)
 {
 	int count = 0;
 
-	if (t_type == PieceType::GREEN)
-	{
-		for (Piece* piece : m_piecesGreen)
-		{
-			for (Tile* goalTile : m_redGoalTiles)
-			{
-				if (piece->getTile() == goalTile)
-				{
-					count += 1;
-					break;
-				}
-			}
-		}
+	int typeIndex1 = static_cast<int>(t_type);
+	int typeIndex2 = (typeIndex1 + 1) % 2;
 
-		if (count == m_piecesGreen.size())
+	for (Piece* piece : m_pieces[typeIndex1])
+	{
+		for (Tile* goalTile : m_goalTiles[typeIndex2])
 		{
-			return true;
+			if (piece->getTile() == goalTile)
+			{
+				count += 1;
+				break;
+			}
 		}
 	}
 
-	else
+	if (count == m_pieces[typeIndex1].size())
 	{
-		for (Piece* piece : m_piecesRed)
-		{
-			for (Tile* goalTile : m_greenGoalTiles)
-			{
-				if (piece->getTile() == goalTile)
-				{
-					count += 1;
-					break;
-				}
-			}
-		}
-
-		if (count == m_piecesRed.size())
-		{
-			return true;
-		}
+		return true;
 	}
 
 	return false;
@@ -281,27 +249,21 @@ bool Board::checkForWin(PieceType t_type)
 
 void Board::restart()
 {
-	for (Piece* piece : m_piecesRed)
+	for (int i = 0; i < m_pieces.size(); i++)
 	{
-		piece->getTile()->setIsOccupied(false);
-		piece->setTile(nullptr);
+		for (Piece* piece : m_pieces[i])
+		{
+			piece->getTile()->setIsOccupied(false);
+			piece->setTile(nullptr);
+		}
 	}
 
-	for (Piece* piece : m_piecesGreen)
+	for (int i = 0; i < m_pieces.size(); i++)
 	{
-		piece->getTile()->setIsOccupied(false);
-		piece->setTile(nullptr);
-	}
-
-	for (int i = 0; i < m_piecesGreen.size(); i++)
-	{
-		m_piecesGreen[i]->setTile(m_greenGoalTiles[i]);
-		m_greenGoalTiles[i]->setIsOccupied(true);
-	}
-
-	for (int i = 0; i < m_piecesRed.size(); i++)
-	{
-		m_piecesRed[i]->setTile(m_redGoalTiles[i]);
-		m_redGoalTiles[i]->setIsOccupied(true);
+		for (int j = 0; j < m_pieces[i].size(); j++)
+		{
+			m_pieces[i][j]->setTile(m_goalTiles[i][j]);
+			m_goalTiles[i][j]->setIsOccupied(true);
+		}
 	}
 }
